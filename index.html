@@ -257,24 +257,11 @@
     height:240px;
     margin:0 auto;
   }
-  /* Quand une image est présente, l'encadré épouse la taille de l'image */
-  .card .media.has-img{
-    height:auto;
-  }
-  .card .media[data-card="3"].has-img{
-    width:100%;
-    height:auto;
-    margin:0;
-  }
   .card .media:hover{border-color:var(--accent);}
   .card .media img{
     width:100%; height:100%;
     object-fit:cover;
     display:block;
-  }
-  .card .media.has-img img{
-    height:auto;
-    object-fit:contain;
   }
   .card .media .placeholder{
     display:flex;
@@ -676,7 +663,7 @@
         <div class="icon">🛠️</div>
         <p class="card-tag" contenteditable="true">Case 01</p>
         <h4 class="card-title clickable" id="open-projects-entreprise" title="Cliquez pour voir/ajouter vos projets">Projets entreprise 🔗</h4>
-        <p class="card-text" contenteditable="true">Présentez ici vos réalisations en entreprise : missions confiées, projets menés et compétences développées sur le terrain.</p>
+        <p class="card-text" contenteditable="true">Pathé Seguin</p>
         <p class="edit-hint">Cliquez sur un texte pour l'éditer</p>
       </article>
 
@@ -765,31 +752,10 @@
 <script id="cv-video-data">/* Aucune vidéo pour le moment */</script>
 
 <script>
-  // ---- Gestion des images des encadrés (persistance via localStorage) ----
   document.querySelectorAll('.media').forEach(function(media){
     const input = media.querySelector('input[type="file"]');
     const img = media.querySelector('img');
     const removeBtn = media.querySelector('.remove-img');
-    const cardId = media.getAttribute('data-card');
-    const storageKey = 'portfolio_img_' + cardId;
-
-    // Au chargement : si une image est déjà présente dans la page (issue
-    // d'un export précédent), on la mémorise. Sinon, on tente de restaurer
-    // la dernière image sauvegardée dans le navigateur.
-    try {
-      if (media.classList.contains('has-img') && img.src && img.src.indexOf('data:') === 0) {
-        localStorage.setItem(storageKey, img.src);
-      } else {
-        const saved = localStorage.getItem(storageKey);
-        if (saved) {
-          img.src = saved;
-          img.style.display = 'block';
-          media.classList.add('has-img');
-        }
-      }
-    } catch (err) {
-      // localStorage indisponible (mode privé, etc.) : on ignore simplement
-    }
 
     input.addEventListener('change', function(e){
       const file = e.target.files[0];
@@ -799,7 +765,6 @@
         img.src = ev.target.result;
         img.style.display = 'block';
         media.classList.add('has-img');
-        try { localStorage.setItem(storageKey, ev.target.result); } catch (err) {}
       };
       reader.readAsDataURL(file);
     });
@@ -811,7 +776,6 @@
       img.style.display = 'none';
       media.classList.remove('has-img');
       input.value = '';
-      try { localStorage.removeItem(storageKey); } catch (err) {}
     });
   });
 </script>
